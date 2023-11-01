@@ -1,4 +1,6 @@
+import { sql } from './app.js';
 import Fastify from 'fastify';
+
 const fastify = Fastify({
     logger: true
 })
@@ -6,8 +8,8 @@ const fastify = Fastify({
 const port = 3333;
 
 // Declare a route
-fastify.get('/', async function handler(request, reply) {
-    return { hello: 'world' }
+fastify.get('/', async function() {
+    return await sql`SELECT * FROM user_info`
 })
 
 // Run the server!
