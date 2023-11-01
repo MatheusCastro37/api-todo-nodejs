@@ -3,6 +3,8 @@ const fastify = Fastify({
     logger: true
 })
 
+const port = 3333;
+
 // Declare a route
 fastify.get('/', async function handler(request, reply) {
     return { hello: 'world' }
@@ -10,7 +12,7 @@ fastify.get('/', async function handler(request, reply) {
 
 // Run the server!
 try {
-    await fastify.listen({ port: 3000 })
+    await fastify.listen({ port: port })
 } catch (err) {
     fastify.log.error(err)
     process.exit(1)
