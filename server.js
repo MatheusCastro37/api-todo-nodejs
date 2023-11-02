@@ -15,6 +15,10 @@ fastify.get('/', async function() {
     return await sql`SELECT * FROM user_info`
 })
 
+fastify.get('/createUser', async function(req, res) {
+    return await sql`SELECT * FROM user_info`
+})
+
 fastify.post('/createUser', async function(req, res) {
     const userID = uuidv4();
     await sql`
