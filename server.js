@@ -1,4 +1,5 @@
 import Fastify from 'fastify';
+import cors from '@fastify/cors';
 
 import { sql } from './app.js';
 
@@ -7,6 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 const fastify = Fastify({
     logger: true
 })
+await fastify.register(cors)
 
 const port = 3333;
 
