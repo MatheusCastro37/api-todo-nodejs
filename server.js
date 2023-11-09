@@ -21,6 +21,11 @@ fastify.get('/createUser', async function(req, res) {
     return await sql`SELECT * FROM user_info`
 })
 
+fastify.get('/todoList/:user_id', async function(req, res) {
+    const { user_id } = req.params
+    return await sql`SELECT * FROM user_todos WHERE user_id_todo = ${user_id}`
+})
+
 fastify.post('/createUser', async function(req, res) {
     const userID = uuidv4();
     await sql`
