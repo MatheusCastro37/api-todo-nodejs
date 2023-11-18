@@ -13,12 +13,20 @@ await fastify.register(cors)
 const port = 3333;
 
 // Declare a route
-fastify.get('/', async function() {
-    return await sql`SELECT * FROM user_info`
-})
+fastify.post('/', async function(req, res) {
 
-fastify.get('/createUser', async function(req, res) {
-    return await sql`SELECT * FROM user_info`
+    const { email, password } = req.body
+
+    const verifyUserDB = await sql`SELECT user_email, user_password FROM user_info WHERE user_email LIKE ${email} AND user_password = ${password} `
+    
+    if(verifyUserDB.length === 1){
+        res.status(200).send('email e senha existe!')
+    }
+
+    if(verifyUserDB.length === 0){
+        res.status(404).send('email ou senha não existe!')
+    }
+
 })
 
 fastify.get('/todoList/:user_id', async function(req, res) {
