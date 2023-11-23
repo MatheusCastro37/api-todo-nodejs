@@ -17,16 +17,17 @@ const port = 3333;
 // Declare a route
 fastify.post('/', async function(req, res) {
 
-    const { email, password } = req.body
+    var { email, password } = req.body
+    password = password.toString()
 
-    const verifyUserDB = await sql`SELECT user_email, user_password FROM user_info WHERE user_email LIKE ${email} AND user_password = ${password} `
-    
-    if(verifyUserDB.length === 1){
-        res.status(200).send('email e senha existe!')
-    }
+    try {
 
-    if(verifyUserDB.length === 0){
-        res.status(404).send('email ou senha não existe!')
+        const [ verifyUserDB ] = await sql`SELECT user_id, user_email, user_password FROM user_info WHERE user_email LIKE ${email}`
+        const comparedPassword = await bcrypt.compare(password, verifyUserDB.user_password)
+        res.status(200).send({ msg: 'email e senha existe!' })
+
+    } catch (error) {
+        res.status(400).send({ msg: "Email ou senha incorretos!" })
     }
 
 })
