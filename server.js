@@ -1,7 +1,9 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 
+import Jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import 'dotenv/config'
 
 import { sql } from './app.js';
 
@@ -20,14 +22,27 @@ fastify.post('/', async function(req, res) {
     var { email, password } = req.body
     password = password.toString()
 
+    const [ verifyUserDB ] = await sql`SELECT user_id, user_email, user_password FROM user_info WHERE user_email LIKE ${email}`
+
+    if(!verifyUserDB) {
+        res.status(400).send({ msg: "Email não cadastrado!" })
+    }
+
+    const comparedPassword = await bcrypt.compare(password, verifyUserDB.user_password)
+
+    if(!comparedPassword) {
+        res.status(400).send({ msg: "Senha Invalida!" })
+    }
+
     try {
 
-        const [ verifyUserDB ] = await sql`SELECT user_id, user_email, user_password FROM user_info WHERE user_email LIKE ${email}`
-        const comparedPassword = await bcrypt.compare(password, verifyUserDB.user_password)
-        res.status(200).send({ msg: 'email e senha existe!' })
+        const token = Jwt.sign({ userID: verifyUserDB.user_id, email: verifyUserDB.user_email }, process.env.SECRET)
+        res.status(201).headers({
+            'authorization': token
+        })
 
     } catch (error) {
-        res.status(400).send({ msg: "Email ou senha incorretos!" })
+        res.status(400).send(error)
     }
 
 })
