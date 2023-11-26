@@ -103,10 +103,36 @@ fastify.post('/todoList/:user_id', async function(req, res) {
     `
 })
 
-fastify.get('/todoList/:user_id', async function(req, res) {
-    const { user_id } = req.params
-    return await sql`SELECT * FROM user_todos WHERE user_id_todo = ${user_id}`
-})
+fastify.get('/todoList',{
+        preHandler: (req, res, done) => {
+            const cookieTokenAPI = req.unsignCookie(req.cookies.tokenAPI)
+
+            if(!cookieTokenAPI.valid) {
+                res.status(401).send({ msg: 'Cookie não autorizado' })
+            }
+
+            const tokenAPI = cookieTokenAPI.value
+            
+            Jwt.verify(tokenAPI, process.env.SECRET, (err, decoded) => {
+
+                if(err) {
+                    res.status(401).send(err.message)
+                }
+
+                if(decoded) {
+                    req.user = decoded.userID
+                    done()
+                }
+                
+            })
+
+        }
+    },
+    async function(req, res) {
+        res.status(200)
+        return await sql`SELECT todo_id, todo_name FROM user_todos WHERE user_id_todo = ${req.user}`
+    }
+)
 
 // Run the server!
 try {
