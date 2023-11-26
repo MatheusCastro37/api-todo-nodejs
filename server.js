@@ -1,6 +1,8 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 
+import fastifyCookie from "@fastify/cookie";
+
 import Jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import 'dotenv/config'
@@ -12,7 +14,17 @@ import { v4 as uuidv4 } from 'uuid';
 const fastify = Fastify({
     logger: true
 })
-await fastify.register(cors)
+
+await fastify.register(cors, {
+    origin: 'http://localhost:3000',
+    credentials: true
+})
+
+await fastify.register(fastifyCookie, {
+    secret: process.env.COOKIE_SECRET,
+    hook: 'onRequest',
+    parseOptions: {}
+})
 
 const port = 3333;
 
@@ -20,7 +32,7 @@ const port = 3333;
 fastify.post('/', async function(req, res) {
 
     var { email, password } = req.body
-    password = password.toString()
+    password = password.toString();
 
     const [ verifyUserDB ] = await sql`SELECT user_id, user_email, user_password FROM user_info WHERE user_email LIKE ${email}`
 
@@ -37,12 +49,22 @@ fastify.post('/', async function(req, res) {
     try {
 
         const token = Jwt.sign({ userID: verifyUserDB.user_id, email: verifyUserDB.user_email }, process.env.SECRET)
-        res.status(201).headers({
-            'authorization': token
+
+        res.cookie('tokenAPI', token, {
+            httpOnly: true,
+            signed: true,
+            secure: true,
+            path: '/'
         })
 
+        res.headers({
+            'access-control-expose-headers': '*'
+        })
+
+        res.status(201).send({ msg: 'login feito!' })
+
     } catch (error) {
-        res.status(400).send(error)
+        res.status(500).send(error)
     }
 
 })
