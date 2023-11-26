@@ -94,13 +94,18 @@ fastify.post('/createUser', async function(req, res) {
     
 })
 
-fastify.post('/todoList/:user_id', async function(req, res) {
+fastify.post('/todoList', async function(req, res) {
+
+    const token = req.unsignCookie(req.cookies.tokenAPI)
+    const decoded = Jwt.verify(token.value, process.env.SECRET)
     const todoID = uuidv4();
-    const { user_id } = req.params
+
     await sql`
         INSERT INTO user_todos(todo_id, todo_name, user_id_todo)
-        VALUES(${todoID}, ${req.body.todo},${user_id})
+        VALUES(${todoID}, ${req.body.todo},${decoded.userID})
     `
+
+    res.status(201)
 })
 
 fastify.get('/todoList',{
