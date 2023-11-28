@@ -139,6 +139,17 @@ fastify.get('/todoList',{
     }
 )
 
+fastify.delete('/todoList', async function(req, res) {
+
+    const todoID = req.body
+    await sql`
+        DELETE FROM user_todos
+        WHERE todo_id LIKE ${todoID}
+    `
+    res.status(200).send({ msg: 'Tarefa deletada com sucesso!' })
+
+})
+
 // Run the server!
 try {
     await fastify.listen({ port: port })
