@@ -54,11 +54,8 @@ fastify.post('/', async function(req, res) {
             httpOnly: true,
             signed: true,
             secure: true,
+            sameSite: 'none',
             path: '/'
-        })
-
-        res.headers({
-            'access-control-expose-headers': '*'
         })
 
         res.status(201).send({ msg: 'login feito!' })
