@@ -55,7 +55,8 @@ fastify.post('/', async function(req, res) {
             signed: true,
             secure: true,
             sameSite: 'none',
-            path: '/'
+            path: '/',
+            maxAge: 123456789
         })
 
         res.status(201).send({ msg: 'login feito!' })
