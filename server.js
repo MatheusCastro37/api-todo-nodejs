@@ -149,9 +149,9 @@ fastify.delete('/todoList', async function(req, res) {
 
 // Run the server!
 try {
-    await fastify.listen({ 
+    fastify.listen({ 
         host: '0.0.0.0',
-        port: port
+        port: process.env.PORT ?? port
     })
 } catch (err) {
     fastify.log.error(err)
