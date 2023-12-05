@@ -55,7 +55,7 @@ fastify.post('/', async function(req, res) {
             httpOnly: true,
             signed: true,
             secure: true,
-            sameSite: 'none',
+            sameSite: 'strict',
             path: '/',
             partitioned: true,
             maxAge: 123456789
