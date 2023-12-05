@@ -50,7 +50,7 @@ fastify.post('/', async function(req, res) {
 
         const token = Jwt.sign({ userID: verifyUserDB.user_id, email: verifyUserDB.user_email }, process.env.SECRET)
 
-        res.cookie('tokenAPI', token, {
+        res.setCookie('tokenAPI', token, {
             domain: 'api-todo-nodejs.onrender.com',
             httpOnly: true,
             signed: true,
@@ -59,9 +59,7 @@ fastify.post('/', async function(req, res) {
             path: '/',
             partitioned: true,
             maxAge: 123456789
-        })
-
-        res.status(201).send({ msg: 'login feito!' })
+        }).status(201).send({ msg: 'login feito!' })
 
     } catch (error) {
         res.status(500).send(error)
