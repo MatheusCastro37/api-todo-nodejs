@@ -16,7 +16,7 @@ const fastify = Fastify({
 })
 
 await fastify.register(cors, {
-    origin: 'https://todo-list-beta-sable.vercel.app',
+    origin: 'https://todo-list-gold-three.vercel.app',
     credentials: true
 })
 
