@@ -51,7 +51,7 @@ fastify.post('/', async function(req, res) {
         const token = Jwt.sign({ userID: verifyUserDB.user_id, email: verifyUserDB.user_email }, process.env.SECRET)
 
         res.setCookie('tokenAPI', token, {
-            domain: 'todo-list-gold-three.vercel.app',
+            domain: 'api-todo-nodejs.onrender.com',
             httpOnly: true,
             signed: true,
             secure: true,
