@@ -105,6 +105,17 @@ fastify.post('/todoList', async function(req, res) {
     res.status(201)
 })
 
+fastify.get('/', async (req, res) => {
+    const cookie = req.cookies.tokenAPI
+
+    if(cookie) {
+        res.status(200)
+    }
+
+    res.status(401)
+
+})
+
 fastify.get('/todoList',{
         preHandler: (req, res, done) => {
             const cookieTokenAPI = req.unsignCookie(req.cookies.tokenAPI)
