@@ -113,7 +113,7 @@ fastify.get('/', async (req, res) => {
     } else {
         res.status(401)
     }
-
+    
 })
 
 fastify.get('/todoList',{
