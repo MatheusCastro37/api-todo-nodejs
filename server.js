@@ -108,11 +108,11 @@ fastify.post('/todoList', async function(req, res) {
 fastify.get('/', async (req, res) => {
     const cookie = req.cookies.tokenAPI
 
-    if(cookie) {
+    if(cookie !== undefined) {
         res.status(200)
+    } else {
+        res.status(401)
     }
-
-    res.status(401)
 
 })
 
