@@ -98,8 +98,8 @@ fastify.post('/todoList', async function(req, res) {
     const todoID = uuidv4();
 
     await sql`
-        INSERT INTO user_todos(todo_id, todo_name, user_id_todo)
-        VALUES(${todoID}, ${req.body.todo},${decoded.userID})
+        INSERT INTO user_todos(todo_check, todo_id, todo_name, user_id_todo)
+        VALUES(false, ${todoID}, ${req.body.todo},${decoded.userID})
     `
 
     res.status(201)
