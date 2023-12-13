@@ -143,7 +143,7 @@ fastify.get('/todoList',{
     },
     async function(req, res) {
         res.status(200)
-        return await sql`SELECT todo_id, todo_name FROM user_todos WHERE user_id_todo = ${req.user}`
+        return await sql`SELECT todo_id, todo_name, todo_check FROM user_todos WHERE user_id_todo = ${req.user}`
     }
 )
 
