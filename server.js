@@ -158,6 +158,21 @@ fastify.delete('/todoList', async function(req, res) {
 
 })
 
+fastify.patch('/todoList', async function (req, res) {
+    const todoID = req.body
+    const todoBool = await sql`
+        SELECT todo_check FROM user_todos
+        WHERE todo_id LIKE ${todoID}
+    `
+    const todoCheck = todoBool[0].todo_check
+
+    await sql`
+        UPDATE user_todos
+        SET todo_check = ${!todoCheck}
+        WHERE todo_id LIKE ${todoID}
+    `
+})
+
 // Run the server!
 try {
     fastify.listen({ 
