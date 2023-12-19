@@ -174,8 +174,7 @@ fastify.patch('/todoList', async function (req, res) {
 })
 
 fastify.head("/todoList", async function (req, res) {
-    const cookie = req.cookies
-    res.clearCookie(cookie, { path: '/' });
+    res.clearCookie('tokenAPI', { path: '/', domain: '.api-todo-nodejs.onrender.com', secure: true, httpOnly: true, sameSite: 'none', signed: true });
 });
 
 // Run the server!
