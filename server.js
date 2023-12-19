@@ -173,6 +173,10 @@ fastify.patch('/todoList', async function (req, res) {
     `
 })
 
+fastify.head("/todoList", async function (req, res) {
+    res.clearCookie("tokenAPI");
+});
+
 // Run the server!
 try {
     fastify.listen({ 
